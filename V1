@@ -1,0 +1,201 @@
+import java.util.*;
+
+public class fppemdas {
+    final static int MAX_SISWA = 10;
+    final static int MAX_MATPEL = 10;
+    final static int MAX_SEMESTER = 2;
+    /* menyimpan nama siswa */
+    static String[] siswa = new String[MAX_SISWA];
+    /* menyimpan nama matpel per siswa tiap semester, semester ganjil=0, genap=1 */
+    static String[] banyakmatpel = new String[MAX_MATPEL];
+    static String[][][] siswaMatpel = new String[MAX_SISWA][MAX_SEMESTER][MAX_MATPEL];
+    /* menyimpan nilai matpel per siswa tiap semester, semester ganjil=0, genap=1 */
+    static double[][][] siswaMatpelNilai = new double[MAX_SISWA][MAX_SEMESTER][MAX_MATPEL];
+    /* menyimpan banyak siswa */
+    static int banyakSiswa = 0;
+    /* menyimpan banyak matpel */
+    static int banyakSiswaMatpel = 0;
+    static Scanner universal;
+    static int indexsiswa = 0;
+    static int indexmapel = 0;
+    static int indexsemester = 0;
+    static String[] input;
+    static String matpel;
+    static int nilai;
+    static int semester;
+    static String nilaistr;
+    //udah bener
+    public static String konversiNilai(double nilai){
+        String nilaistr;
+        if(nilai > 80 && nilai <= 100) {
+            nilaistr = "A";
+        }
+        else if(nilai <= 80 && nilai > 75) {
+            nilaistr = "B+";
+        }
+        else if(nilai <= 75 && nilai > 69) {
+            nilaistr = "B";
+        }
+        else if(nilai <= 69 && nilai > 65) {
+            nilaistr = "C+";
+        }
+        else if(nilai <= 65 && nilai > 59) {
+            nilaistr = "C";
+        }
+        else if(nilai <= 59 && nilai > 55) {
+            nilaistr = "D+";
+        }
+        else if(nilai <= 55 && nilai > 40) {
+            nilaistr = "D";
+        }
+        else {
+            nilaistr = "E";
+        }
+        return nilaistr;
+    }
+   
+    //cek lagi
+    public static void tambahSiswa(String nama){
+            nama = input[1];
+            siswa[banyakSiswa] = nama;       
+            banyakSiswa++;
+        }
+    
+    public static void tambahMatpel(String matpel){
+            matpel = input[1];
+            banyakmatpel[banyakSiswaMatpel] = matpel;
+            banyakSiswaMatpel++;
+            
+        }
+    
+    
+    
+    public static int cariSiswa(String nama){
+        indexsiswa = 0;
+        
+        for(int i = 0; i < banyakSiswa; i++) {
+            if(nama.equals(siswa[i])) {
+                indexsiswa = i;
+            }
+        }
+        return indexsiswa;
+    }
+
+    public static int cariMatpel(String matpel){
+        indexmapel = 0;
+
+        for(int i = 0; i < banyakSiswaMatpel; i++) {
+            if(matpel.equals(banyakmatpel[i])) {
+                indexmapel = i;
+            }
+        }
+        return indexmapel;
+    }
+
+    /*
+    nama: nama siswa
+    semester: semester, 0 untuk ganjil, 1 untuk genap
+    matpel: nama matpel
+    nilai: nilai matpel tiap semester
+    */
+
+    public static void isiDataSiswa(String nama, int semester, String matpel, int nilai){
+        if(input[2] == "GENAP") {
+            semester = 1;
+        }
+        else if(input[2] == "GANJIL") {
+            semester = 0;
+        }
+        siswaMatpelNilai[indexsiswa][semester][indexmapel] = nilai;
+
+
+    }
+   //bisa
+    public static void printSiswa(){
+        System.out.print("Siswa: ");
+        for(int i = 0; i < banyakSiswa; i++) {
+            System.out.printf("%s ", siswa[i]);
+        }
+        System.out.println(" ");
+    }
+    //cek lagi
+    public static void printMatpel(){
+        System.out.print("MATA PELAJARAN: ");
+        for(int i = 0; i < banyakSiswaMatpel; i++) {
+            System.out.print(banyakmatpel[i]);
+            System.out.print(" ");
+        }
+        System.out.println();
+        //masih ada salah, print raport tergantung nama yang dipanggil
+    }
+    public static void printRaportSiswa(String nama){
+        for(int i = 0; i < banyakSiswa; i++) {
+            System.out.println(">> BEGIN RAPORT <<");
+            System.out.println("\nNama : \t" + siswa[i]);
+            for(int k = 0; k < MAX_SEMESTER; k++) {
+                String semester = "";
+                if(k == 0) {
+                    semester = "GANJIL";
+                }
+                else if (k == 1) {
+                    semester = "GENAP";
+                }
+                System.out.println("\nSemester : " + semester);
+                System.out.println("Mata Pelajaran\t\t|\tNilai|\tNilai Huruf");
+                System.out.println("-----------------------------------------------");
+                    for(int j = 0; j < banyakSiswaMatpel; j++) {
+                        
+                    System.out.printf("%-24s|%12d|%20s"+ siswa[j], siswaMatpelNilai[j][k][i], nilaistr);
+                }
+            }
+            System.out.println("\n>> END RAPORT <<");
+        }
+    }
+    //raport masih harus pakai printf
+   
+    public static int cariJuara(int semester){
+    }
+   
+    public static void hitungNilai(int semester){
+    }
+   
+    public static void main(String[] args) {
+        universal = new Scanner(System.in);
+        String nama = "";
+        String matpel = "";
+
+        int ulang = 1;
+        while(ulang == 1){
+        input = universal.nextLine().split(" ");
+
+        if (input[0].equals("SISWA")) {
+            tambahSiswa(nama);
+        }
+        
+        if(input[0].equals("PRINT_SISWA")) {
+            printSiswa();
+        }
+        
+        if(input[0].equals("MATPEL")) {
+            tambahMatpel(matpel);
+        }
+
+        if(input[0].equals("NILAI")) {
+            isiDataSiswa(nama, semester, matpel, nilai);
+        }
+
+        if(input[0].equals("PRINT_RAPORT")) {
+            printRaportSiswa(nama);
+        }
+
+        if(input[0].equals("PRINT_MATPEL")) {
+            printMatpel();
+        }
+
+        if(input[0].equals("PRINT_RAPORT")) {
+            printRaportSiswa(nama);
+        }
+
+        }
+    }
+   }
